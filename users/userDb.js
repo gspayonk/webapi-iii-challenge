@@ -1,4 +1,4 @@
-const db = require('../data/dbConfig.js');
+const dB = require('../data/dbConfig.js');
 
 module.exports = {
   get,
@@ -10,38 +10,53 @@ module.exports = {
 };
 
 function get() {
-  return db('users');
+
+  return dB('users');
 }
 
 function getById(id) {
-  return db('users')
+
+  return dB('users')
     .where({ id })
     .first();
 }
 
 function getUserPosts(userId) {
-  return db('posts as p')
+
+  return dB('posts as p')
+
     .join('users as u', 'u.id', 'p.user_id')
+
     .select('p.id', 'p.text', 'u.name as postedBy')
+
     .where('p.user_id', userId);
 }
 
 function insert(user) {
-  return db('users')
+
+  return dB('users')
+
     .insert(user)
-    .then(ids => {
-      return getById(ids[0]);
+
+    .then(allid => {
+      return getById(allid[0]);
     });
 }
 
 function update(id, changes) {
-  return db('users')
+
+  return dB('users')
+
     .where({ id })
+
     .update(changes);
 }
 
 function remove(id) {
-  return db('users')
+
+  return dB('users')
+
     .where('id', id)
+    
     .del();
 }
